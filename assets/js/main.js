@@ -27,8 +27,10 @@ function preload() {
   this.load.image("button1", "assets/images/ui/blue_button01.png");
   this.load.spritesheet('items', "assets/images/items.png", {frameWidth: 32, frameHeight: 32 });
   this.load.spritesheet('characters', "assets/images/characters.png", {frameWidth: 32, frameHeight: 32 });
+  this.load.audio('goldSound', ['assets/audio/Pickup.wav'])
 }
 function create() {
+  var goldPickupAudio = this.sound.add('goldSound', { loop: false, volume: 0.5 });
   var button = this.add.image(100, 100, "button1");
   button.setOrigin(0,0);
   this.add.sprite(300, 100, "button1");
@@ -42,7 +44,10 @@ function create() {
   this.player.body.setCollideWorldBounds(true);
   
   this.physics.add.collider(this.player, this.wall)
-  this.physics.add.overlap(this.player, this.chest, () => {console.log('overlap')})
+  this.physics.add.overlap(this.player, this.chest, (player, chest) => {  
+    goldPickupAudio.play();
+    chest.destroy();
+  })
 
   this.cursors = this.input.keyboard.createCursorKeys();
 }
